@@ -1,0 +1,6 @@
+node_modules/
+.env
+
+toDo.txt
+text.js
+mysql.js
