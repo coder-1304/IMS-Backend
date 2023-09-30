@@ -18,13 +18,9 @@ router.get('/getShops',auth, shopController.getShops);
 router.post('/addProduct',auth, productController.addProduct);
 router.post('/sellProduct',auth, salesController.sellProduct);
 
-
 router.get('/',(req,res)=>{
     res.send("Server Response Success 5.0!")
 });
-
-
-
 
 // router.post('/register/verifyOTP',registerController.verifyOTP);
 
