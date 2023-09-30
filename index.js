@@ -4,7 +4,7 @@ const app = express();
 
 import errorHandler from './middlewares/errorHandler.js';
 
-
+import cors from 'cors'
 import './Database/connection.js';
 // require('./database/db/connection.js');
 // const Learner = require('./database/models/learner.js');
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded());
 import cookieParser from 'cookie-parser';
 app.use(cookieParser());
-
+app.use(cors());
 app.use(errorHandler);
 
 import routes from './routes/index.js'
