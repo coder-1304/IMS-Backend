@@ -7,7 +7,9 @@ import statusCodes from '../../constants/statusCodes.js';
 
 const loginController = {
     async login(req, res, next) {
+
         try {
+            console.log("Logging In");
             const email = req.body.email;
             const password = req.body.password;
             if (!email || !password) {
@@ -24,13 +26,13 @@ const loginController = {
 
             pool.query(query, async (err, result, fields) => {
                 if (err) {
+                    console.log(err);
                     return res.status(statusCodes[1]).json({
                         success: false,
                         errorCode: 1,
                         message: errorCodes[1]
                     });
                 }
-                // const count = result.length;
                 if (result.length == 0) {
                     return res.status(statusCodes[7]).json({
                         success: false,
@@ -54,11 +56,12 @@ const loginController = {
                 query = `
                     UPDATE Users 
                     SET jwt_token="${token}"
-                    WHERE email="${email}"
+                    WHERE Email="${email}"
                 `;
 
                 pool.query(query, (err, result, fields) => {
                     if (err) {
+                        console.log(err);
                         return res.status(statusCodes[1]).json({
                             success: false,
                             errorCode: 1,
@@ -72,6 +75,7 @@ const loginController = {
                 });
             });
         } catch (error) {
+            console.log(error);
             return res.status(statusCodes[3]).json({
                 success: false,
                 errorCode: 3,
@@ -79,6 +83,8 @@ const loginController = {
             });
         }
     }
+
 }
+    
 
 export default loginController;
