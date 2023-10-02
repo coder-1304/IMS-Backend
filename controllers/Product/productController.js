@@ -4,9 +4,11 @@ import pool from '../../Database/connection.js';
 import jwt from 'jsonwebtoken';
 import errorCodes from '../../constants/errorCodes.js';
 import statusCodes from '../../constants/statusCodes.js';
+import print from '../../constants/print.js';
 
 const productController = {
     async addProduct(req, res, next) {
+        print("Adding Product API CALLED");
         try {
             // Only Admins can add products
             if (req.user.Role != "Admin") {
@@ -16,16 +18,20 @@ const productController = {
                     message: errorCodes[12]  // 403 unauthorized 
                 })
             }
+            print("Admin Verified");
+            print(req.body);
             const email = req.user.Email;
             const productName = req.body.productName;
             const description = req.body.description;
             const price = req.body.price;
             const unitId = req.body.unitId;
-            const shopID = req.body.shopID;
+            const shopID = req.body.shopId;
             const quantity = req.body.quantity;
 
             // All fields must be non-empty
-            if (!productName || !description || !price || !unitId || !shopID || !quantity) {
+            if (!productName || !price || !unitId || !shopID || !quantity) {
+                print("Empty Field detected");
+                print(productName+" "+ description +" "+price+" "+unitId+" "+shopID+" "+quantity);
                 return res.status(statusCodes[2]).json({
                     success: false,
                     errorCode: 2,
@@ -39,7 +45,10 @@ const productController = {
                 WHERE ShopID=${shopID}
             `;
             pool.query(query, (err, result, fields) => {
+                
                 if (err) {
+                    print(err);
+                    console.log(err);
                     return res.status(statusCodes[1]).json({
                         success: false,
                         errorCode: 1,
@@ -48,19 +57,22 @@ const productController = {
                 }
                 else if (result[0].AdminEmail != req.user.Email) {
                     // Unauthorized access 403
+                    print("Unauthorized");
                     return res.status(statusCodes[12]).json({
                         success: false,
                         errorCode: 12,
                         message: errorCodes[12]
                     })
                 }
+                print("Adding product");
                 // Adding Product to database
                 query = `
-                    INSERT INTO Products (ProductName, Description, Price,quantity, UnitID, ShopID, AddedOn)
+                    INSERT INTO Products (ProductName, Description, Price, Quantity, UnitID, ShopID, AddedOn)
                     VALUES('${productName}', '${description}', ${price},${quantity}, '${unitId}', '${shopID}', NOW())
                 `;
                 pool.query(query, (err, result, fields) => {
                     if (err) {
+                        console.log(err);
                         return res.status(statusCodes[1]).json({
                             success: false,
                             errorCode: 1,
@@ -73,6 +85,7 @@ const productController = {
                 });
             });
         } catch (err) {
+            console.log(err);
             return res.status(statusCodes[3]).json({
                 success: false,
                 errorCode: 3,
@@ -82,7 +95,8 @@ const productController = {
     },
     async getShopProducts(req, res, next) {
         try {
-            const shopId = req.body.shopId;
+            const shopId = req.params.shopId;
+            // console.log(shopId);
             if (!shopId) {
                 return res.status(statusCodes[2]).json({
                     success: false,
@@ -90,12 +104,13 @@ const productController = {
                     message: errorCodes[2]
                 })
             }
-            query = `
+            const query = `
                 SELECT * FROM Products 
                 WHERE ShopID=${shopId}
             `;
             pool.query(query, (err, result, fields) => {
                 if (err) {
+                    // console.log(err);
                     return res.status(statusCodes[1]).json({
                         success: false,
                         errorCode: 1,
@@ -110,6 +125,7 @@ const productController = {
 
 
         } catch (error) {
+            console.log(error);
             return res.status(statusCodes[3]).json({
                 success: false,
                 errorCode: 3,

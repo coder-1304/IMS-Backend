@@ -16,10 +16,13 @@ router.post('/createShop',auth, shopController.createShop);
 router.get('/getShops',auth, shopController.getShops);
 
 router.post('/addProduct',auth, productController.addProduct);
+router.get('/getProducts/:shopId',auth, productController.getShopProducts);
 router.post('/sellProduct',auth, salesController.sellProduct);
 
+router.get('/getSalesData/:shopId',auth, salesController.getSalesData);
+
 router.get('/',(req,res)=>{
-    res.send("Server Responded SUCCESSFULLY!!")
+    res.send("Server Responded SUCCESSFULLY 2.0!!")
 });
 
 // router.post('/register/verifyOTP',registerController.verifyOTP);
