@@ -69,7 +69,7 @@ const salesController = {
             });
           }
           const price = result[0].Price;
-          const totalAmount = price * quantity;
+          let totalAmount = price * quantity;
           const availableQuantity = result[0].Quantity - quantity;
           const unitID = result[0].UnitId;
           if(unitID!=1){
