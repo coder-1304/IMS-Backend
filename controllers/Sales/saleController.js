@@ -72,6 +72,9 @@ const salesController = {
           const totalAmount = price * quantity;
           const availableQuantity = result[0].Quantity - quantity;
           const unitID = result[0].UnitId;
+          if(unitID!=1){
+            totalAmount= totalAmount/1000;
+          }
           // Updating Products
           print("Updating products");
           query = `

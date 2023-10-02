@@ -22,7 +22,7 @@ router.post('/sellProduct',auth, salesController.sellProduct);
 router.get('/getSalesData/:shopId',auth, salesController.getSalesData);
 
 router.get('/',(req,res)=>{
-    res.send("Server Responded SUCCESSFULLY  S.F.")
+    res.send("Server Responded SUCCESSFULLY  Am Fx")
 });
 
 // router.post('/register/verifyOTP',registerController.verifyOTP);
