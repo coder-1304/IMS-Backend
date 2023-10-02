@@ -13,6 +13,7 @@ const statusCodes = {
     12: 403, // Forbidden: Unauthorized Access 
     13: 400, // Bad Request: Quantity Asked For is More Than Availabe
     14: 401, // Incorrect Credentials
+    15: 400, // Incorrect Credentials
   };
   
   export default statusCodes;

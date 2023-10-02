@@ -108,6 +108,7 @@ const salesController = {
               }
               return res.status(200).json({
                 success: true,
+                totalAmount: totalAmount
               });
             });
           });
