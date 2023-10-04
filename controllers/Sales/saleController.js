@@ -92,9 +92,10 @@ const salesController = {
               });
             }
             // Adding into Sales
+            // (DATE_SUB(NOW(), INTERVAL 9 DAY))
             query = `
                         INSERT INTO Sales (ProductID, ShopID, StaffEmail, SaleDate, SaleQuantity, UnitID, TotalAmount)
-                        VALUES (${productID}, ${shopID}, '${req.user.Email}', (DATE_SUB(NOW(), INTERVAL 9 DAY)), ${quantity}, ${unitID}, ${totalAmount})
+                        VALUES (${productID}, ${shopID}, '${req.user.Email}', NOW() , ${quantity}, ${unitID}, ${totalAmount})
                     `;
 
             pool.query(query, (err, result, fields) => {
