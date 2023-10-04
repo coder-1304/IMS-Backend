@@ -7,6 +7,7 @@ import auth from '../middlewares/auth.js';
 import shopController from '../controllers/Shops/shop.js';
 import productController from '../controllers/Product/productController.js';
 import salesController from '../controllers/Sales/saleController.js';
+import productEditor from '../controllers/Product/productEditor.js';
 
 router.post('/register',auth, registerController.register);
 router.post('/verifyOTP', registerController.verifyOTP);
@@ -18,11 +19,13 @@ router.get('/getShops',auth, shopController.getShops);
 router.post('/addProduct',auth, productController.addProduct);
 router.get('/getProducts/:shopId',auth, productController.getShopProducts);
 router.post('/sellProduct',auth, salesController.sellProduct);
+router.post('/editProduct',auth, productEditor.editProduct);
 
 router.get('/getSalesData/:shopId',auth, salesController.getSalesData);
+router.get('/getGroupedSalesData/:shopId/:days',auth, salesController.getGroupedSalesData);
 
 router.get('/',(req,res)=>{
-    res.send("Server Responded SUCCESSFULLY  Minor fixes")
+    res.send("Server Responded SUCCESSFULLY  ED PR IM")
 });
 
 // router.post('/register/verifyOTP',registerController.verifyOTP);

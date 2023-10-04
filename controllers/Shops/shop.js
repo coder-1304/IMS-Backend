@@ -59,7 +59,7 @@ const shopController = {
     try {
       const query = `
             SELECT * from Shops
-            WHERE AdminEmail="${req.user.Email}"
+            WHERE AdminEmail="${req.user.AdminEmail}"
         `;
       pool.query(query, (err, result, fields) => {
         if (err) {

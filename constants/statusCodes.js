@@ -14,6 +14,7 @@ const statusCodes = {
     13: 400, // Bad Request: Quantity Asked For is More Than Availabe
     14: 401, // Incorrect Credentials
     15: 400, // Incorrect Credentials
+    16: 200, // OTP Verification Required
   };
   
   export default statusCodes;

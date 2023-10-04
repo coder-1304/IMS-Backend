@@ -13,7 +13,8 @@ const errorCodes = {
   12: "Unauthorized Access: You Are Not Allowed To Perform This Action", // 403 Forbidden
   13: "Bad Request: Quantity Asked For is More Than Availabe",  // 400 Bad Request
   14: "Incorrect Credentials", // 401
-  15: "Available quantity and price must be more than 0" // 400
+  15: "Available quantity and price must be more than 0", // 400
+  16: "User not vefified OTP please verify!"
 };
 
 export default errorCodes;

@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import print from '../../constants/print.js';
 import '../../services/customErrorHandler.js'
 import CustomErrorHandler from '../../services/customErrorHandler.js';
 import bcrypt from 'bcrypt';
@@ -137,7 +137,7 @@ const registerController = {
                 })
             }
             const query = `
-                select OTP from Users where Email= "${req.body.email}"
+                select * from Users where Email= "${req.body.email}"
             `;
             pool.query(query, async (err, result, fields) => {
                 if (err) {
@@ -157,6 +157,9 @@ const registerController = {
                     return res.end();
                 }
                 const otp = result[0].OTP;
+                print("RESULT FOR USER:");
+                print(result[0]);
+                const userRole = result[0]["Role"];
                 const email = req.body.email;
                 if (otp == req.body.otp) {
                     const token = jwt.sign({ email }, process.env.JWTSECRETKEY, { expiresIn: "300h" });
@@ -173,12 +176,14 @@ const registerController = {
                                 message: errorCodes[1]
                             });
                         }
-                        // console.log(result);
-                        res.json({
+                        // console.log("Sending rol");
+                        print("Sending ROle as");
+                        print(userRole);
+                        return res.status(200).json({
                             success: true,
-                            jwt_token: token
+                            jwt_token: token,
+                            role: userRole
                         })
-                        return;
                     });
 
                 } else {

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import pool from '../Database/connection.js';
 import errorCodes from '../constants/errorCodes.js';
 import statusCodes from '../constants/statusCodes.js';
+import print from '../constants/print.js';
 const auth = (req, res, next) => {
     try {
         if (req.body.role && req.body.role == "Admin") {
@@ -23,7 +24,8 @@ const auth = (req, res, next) => {
         const token = authHeader.split(' ')[1];
         let verifyUser;
         try {
-            verifyUser = jwt.verify(token, process.env.JWTSECRETKEY);
+            verifyUser =  jwt.verify(token, process.env.JWTSECRETKEY);
+            // print(verifyUser);
         } catch (error) {
             return res.status(statusCodes[10]).json({
                 success: false,
@@ -33,8 +35,9 @@ const auth = (req, res, next) => {
         }
         //getting all the information of user from the database
         const query = `
-            select * from Users where email="${verifyUser.email}"
+            select * from Users where Email="${verifyUser.email}"
         `;
+        // print(`Query is: ${query}`)
         pool.query(query, (err, result, fields) => {
             if (err) {
                 return res.status(statusCodes[1]).json({
@@ -44,11 +47,14 @@ const auth = (req, res, next) => {
                 });
             }
             let user = result[0];
+            console.log(result);
+            console.log(user);
+
             if(user.IsVerified==0){
-                return res.status(statusCodes[1]).json({
+                return res.status(200).json({
                     success: false,
-                    errorCode: 1,
-                    message: errorCodes[1],
+                    errorCode: 16,
+                    message: errorCodes[16],
                 });
             }
             req.user = user;

@@ -72,8 +72,8 @@ const salesController = {
           let totalAmount = price * quantity;
           const availableQuantity = result[0].Quantity - quantity;
           const unitID = result[0].UnitId;
-          if(unitID!=1){
-            totalAmount= totalAmount/1000;
+          if (unitID != 1) {
+            totalAmount = totalAmount / 1000;
           }
           // Updating Products
           print("Updating products");
@@ -94,7 +94,7 @@ const salesController = {
             // Adding into Sales
             query = `
                         INSERT INTO Sales (ProductID, ShopID, StaffEmail, SaleDate, SaleQuantity, UnitID, TotalAmount)
-                        VALUES (${productID}, ${shopID}, '${req.user.Email}', NOW(), ${quantity}, ${unitID}, ${totalAmount})
+                        VALUES (${productID}, ${shopID}, '${req.user.Email}', (DATE_SUB(NOW(), INTERVAL 9 DAY)), ${quantity}, ${unitID}, ${totalAmount})
                     `;
 
             pool.query(query, (err, result, fields) => {
@@ -108,7 +108,7 @@ const salesController = {
               }
               return res.status(200).json({
                 success: true,
-                totalAmount: totalAmount
+                totalAmount: totalAmount,
               });
             });
           });
@@ -182,6 +182,73 @@ const salesController = {
             });
           }
           print("Successfully got sales data");
+          print(result);
+          return res.status(200).json({
+            success: true,
+            result,
+          });
+        });
+      });
+    } catch (error) {
+      return res.status(statusCodes[3]).json({
+        success: false,
+        errorCode: 3,
+        message: errorCodes[3],
+      });
+    }
+  },
+  async getGroupedSalesData(req, res) {
+    try {
+      const shopId = req.params.shopId;
+      const days = req.params.days;
+
+      if (!shopId || !days) {
+        print("Empty fields");
+        return res.status(statusCodes[2]).json({
+          success: false,
+          errorCode: 2,
+          message: errorCodes[2],
+        });
+      }
+      let query = `
+        SELECT AdminEmail FROM Shops
+        WHERE ShopID=${shopId};
+      `;
+      pool.query(query, (err, result, fields) => {
+        if (err) {
+          print(err);
+          return res.status(statusCodes[1]).json({
+            success: false,
+            errorCode: 1,
+            message: errorCodes[1],
+          });
+        }
+        if (result[0].AdminEmail != req.user.AdminEmail) {
+          return res.status(statusCodes[12]).json({
+            success: false,
+            errorCode: 12,
+            message: errorCodes[12],
+          });
+        }
+        query = `
+          SELECT DATE_FORMAT(SaleDate, '%d/%m/%Y') AS date, SUM(TotalAmount) AS Total_Sale_In_Rupee
+          FROM Sales
+          WHERE SaleDate >= DATE_SUB(CURRENT_DATE, INTERVAL ${days} DAY)
+          AND SaleDate <= CURRENT_DATE
+          AND ShopID = ${shopId}
+          GROUP BY DATE(SaleDate)
+          ORDER BY DATE(SaleDate);
+        `;
+        pool.query(query, (err, result, fields) => {
+          if (err) {
+            print(err);
+            return res.status(statusCodes[1]).json({
+              success: false,
+              errorCode: 1,
+              message: errorCodes[1],
+            });
+          }
+          print("Successfully got grouped sales data");
           print(result);
           return res.status(200).json({
             success: true,
