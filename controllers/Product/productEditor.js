@@ -28,7 +28,7 @@ const productEditor = {
       const shopId = req.body.shopId;
       const quantity = req.body.quantity;
       const productId = req.body.productId;
-      if (quantity <= 0 || price <= 0) {
+      if (quantity < 0 || price <= 0) {
         return res.status(statusCodes[15]).json({
           success: false,
           errorCode: 15,
