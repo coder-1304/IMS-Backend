@@ -25,7 +25,7 @@ router.get('/getSalesData/:shopId',auth, salesController.getSalesData);
 router.get('/getGroupedSalesData/:shopId/:days',auth, salesController.getGroupedSalesData);
 
 router.get('/',(req,res)=>{
-    res.send("Server Responded SUCCESSFULLY  ED PR IM")
+    res.send("Server Responded SUCCESSFULLY  SN")
 });
 
 // router.post('/register/verifyOTP',registerController.verifyOTP);
