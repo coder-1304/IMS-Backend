@@ -25,7 +25,7 @@ router.get('/getSalesData/:shopId',auth, salesController.getSalesData);
 router.get('/getGroupedSalesData/:shopId/:days',auth, salesController.getGroupedSalesData);
 
 router.get('/',(req,res)=>{
-    res.send("Server Responded SUCCESSFULLY Version 1.0")
+    res.send("Server Responded SUCCESSFULLY Version 1.0.1")
 });
 
 // router.post('/register/verifyOTP',registerController.verifyOTP);

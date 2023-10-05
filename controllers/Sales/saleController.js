@@ -164,14 +164,11 @@ const salesController = {
           });
         }
         print("Getting Sales Details");
-        // query = `
-        //           SELECT * FROM Sales
-        //           WHERE ShopID=${shopID}
-        //       `;
         query = `
         SELECT Sales.*,Products.ProductName AS ProductName FROM Sales 
             INNER JOIN Products
-            ON Sales.ProductID=Products.ProductID AND Sales.ShopID=${shopID};
+            ON Sales.ProductID=Products.ProductID AND Sales.ShopID=${shopID}
+            ORDER BY Sales.SaleDate DESC;
         `;
         pool.query(query, (err, result, fields) => {
           if (err) {
@@ -235,7 +232,6 @@ const salesController = {
           SELECT DATE_FORMAT(SaleDate, '%d/%m/%Y') AS date, SUM(TotalAmount) AS Total_Sale_In_Rupee
           FROM Sales
           WHERE SaleDate >= DATE_SUB(CURRENT_DATE, INTERVAL ${days} DAY)
-          AND SaleDate <= CURRENT_DATE
           AND ShopID = ${shopId}
           GROUP BY DATE(SaleDate)
           ORDER BY DATE(SaleDate);
@@ -253,7 +249,7 @@ const salesController = {
           print(result);
           return res.status(200).json({
             success: true,
-            result
+            result,
           });
         });
       });
