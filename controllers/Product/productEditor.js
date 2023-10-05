@@ -28,20 +28,20 @@ const productEditor = {
       const shopId = req.body.shopId;
       const quantity = req.body.quantity;
       const productId = req.body.productId;
-      if (quantity < 0 || price <= 0) {
-        return res.status(statusCodes[15]).json({
-          success: false,
-          errorCode: 15,
-          message: statusCodes[15],
-        });
-      }
-      if (!productName || !price || !unitId || !shopId || !quantity) {
+      if (!productName || !price || !unitId || !shopId || quantity==undefined) {
         // All fields must be non-empty
         print("Empty Field detected");
         return res.status(statusCodes[2]).json({
           success: false,
           errorCode: 2,
           message: errorCodes[2],
+        });
+      }
+      if (quantity < 0 || price <= 0) {
+        return res.status(statusCodes[15]).json({
+          success: false,
+          errorCode: 15,
+          message: statusCodes[15],
         });
       }
 
